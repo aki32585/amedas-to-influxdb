@@ -1,0 +1,3 @@
+# Amedas-to-InfluxDB
+アメダスの観測データを定期的にInfluxDBに投げてくれるやつ  
+Grafanaでアメダスデータを表示するために作った
