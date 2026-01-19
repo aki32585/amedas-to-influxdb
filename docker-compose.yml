@@ -1,0 +1,6 @@
+services:
+  amds-app:
+    build: .
+    env_file:
+      - .env
+    restart: always
