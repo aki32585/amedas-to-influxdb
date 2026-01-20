@@ -2,6 +2,9 @@ services:
   amds-app:
     build: .
     env_file:
-      - stack.env
-     # - .env .env利用時はコメントアウト外す
+      - path: ./stack.env
+        required: true
+      - path: ./.env
+        required: false
+      # .envがあれば.envが優先して使われる
     restart: always
