@@ -2,5 +2,6 @@ services:
   amds-app:
     build: .
     env_file:
-      - .env
+      - stack.env
+     # - .env .env利用時はコメントアウト外す
     restart: always
