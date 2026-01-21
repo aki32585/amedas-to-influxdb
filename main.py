@@ -1,5 +1,8 @@
 import requests
 
+import logging
+logger = logging.getLogger(__name__)
+
 from dotenv import load_dotenv
 import os
 load_dotenv()
@@ -24,14 +27,15 @@ def get_amds_data(no):
     if response.status_code == 200:
         return response.json()
     else:
+        logger.error("API request failed!")
         raise Exception(f"API request failed with status code {response.status_code}")
 
 def main():
     no = os.getenv("AMDS_NO")
     try:
         data = get_amds_data(no)
-        print("Get data from API:")
-        print(data)
+        logger.info("Get data from API:")
+        logger.info(data)
         point = (
     Point("haneda")
     .field("temp", data['temp'][0])
@@ -40,11 +44,12 @@ def main():
   )
         write_api.write(bucket=bucket, org=org, record=point)
     except Exception as e:
-        print(e)
+        logger.error(e)
 
 if __name__ == "__main__":
+    logging.basicConfig(level=logging.INFO)
     scheduler = BlockingScheduler()
     scheduler.add_job(main, 'interval', minutes = int(os.getenv("SCHEDULE_MINUTES") or 5))
-    print(f"Scheduler started. Running every {os.getenv('SCHEDULE_MINUTES')} minutes.")
+    logger.info(f"Scheduler started. Running every {os.getenv('SCHEDULE_MINUTES')} minutes.")
     main()
     scheduler.start()
